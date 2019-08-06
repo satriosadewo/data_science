@@ -1,0 +1,41 @@
+## MULTIPLE LINEAR REGRESSION using Matplotlib (Ordinary Least Square)
+Investigating the influence of the SAT Score and the student attendance on the GPA score
+
+## 1. Import the libraries
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+sns.set()
+
+## 2. Load the data
+data=pd.read_csv('Multiple-linear-regression_GPA_SAT_Attendance.csv')
+data.head()
+
+## 3. Convert the categorical data ('attendance')
+data = data.copy()
+data['Attendance'] = data['Attendance'].map({'Yes':1,'No':0})
+data.head()
+
+data.describe()
+
+## 4. Declare the dependent & the independent variables
+y = data['GPA']
+x1 = data[['SAT','Attendance']]
+
+## 5. Run the regression
+x=sm.add_constant(x1)
+result=sm.OLS(y,x).fit()
+result.summary()
+
+## 6. Shows the line on the scatter plot
+plt.scatter(data["SAT"],y,c=data['Attendance'],cmap='RdYlGn_r')
+yhat_no=0.6439+0.0014*data['SAT']
+yhat_yes=0.6439+0.2226+0.0014*data['SAT']
+yhat=0.0017*data['SAT']+0.275
+fig=plt.plot(data['SAT'],yhat_no,lw=4,c='orange')
+fig=plt.plot(data['SAT'],yhat_yes,lw=4,c='blue')
+fig=plt.plot(data['SAT'],yhat,lw=4,c='black')
+plt.xlabel('SAT',fontsize=20)
+plt.ylabel('GPA',fontsize=20)
+plt.show()
+
