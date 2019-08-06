@@ -39,3 +39,7 @@ plt.xlabel('SAT',fontsize=20)
 plt.ylabel('GPA',fontsize=20)
 plt.show()
 
+## Interpretation:
+1. Looks at the p-value, if the value < 0.05 so the variable has significant explanatory power.
+2. Looks at the adjusted R square, if the value bigger than the last model so the model has a better explanatory power
+3. If the adjusted R square < R square, so there are one or more variables with less/no explanatory power
