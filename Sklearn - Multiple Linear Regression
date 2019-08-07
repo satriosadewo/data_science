@@ -61,3 +61,8 @@ reg_summary=pd.DataFrame(data=x.columns.values,columns=['Features'])
 reg_summary['coefficient']=reg.coef_
 reg_summary['p-value']=p_values.round(4)
 reg_summary
+
+## Interpretation:
+1. Looks at the p-value, if the value < 0.05 so the variable has significant explanatory power.
+2. Looks at the adjusted R square, if the value bigger than the last model so the model has a better explanatory power
+3. If the adjusted R square < R square, so there are one or more variables with less/no explanatory power
