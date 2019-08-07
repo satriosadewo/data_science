@@ -1,0 +1,63 @@
+## MULTIPLE LINEAR REGRESSION using Sklean package
+## Case study : The influence of size and year on the property price
+
+## 1. Import Relevant Libraries
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+sns.set()
+from sklearn.linear_model import LinearRegression
+
+## 2. Load the Data
+data=pd.read_csv('real_estate_price_size_year.csv')
+data.head()
+
+data.describe()
+
+## 3. Create the Regression
+## a. Declare the Dependent & the Independent Variables
+y=data['price']
+x=data[['size',"year"]]
+
+## b. Regression Itself
+reg=LinearRegression()
+reg.fit(x,y)
+
+## c. Calculate the Coefficient
+reg.coef_
+
+## d. Calculate the Intercept
+reg.intercept_
+
+## 4. Calculating the R-Squared
+reg.score(x,y)
+
+## 5. Calculating the Adjusted R-Squared
+## a. Turn the 'cell' into 'markdown'
+$R^2_(adj.)=1-(1-R^2)*\frac{n-1}{n-p-1}
+
+## b. Show the shape to know n & p
+x.shape
+
+## c. Adjusted R-Squared
+r2=reg.score(x,y)
+n=x.shape[0]
+p=x.shape[1]
+adjusted_r2=1-(1-r2)*(n-1)/(n-p-1)
+adjusted_r2
+
+## 6. Calculate the univarate p-valuea of the variables
+## a. Import the library for feature selection
+from sklearn.feature_selection import f_regression
+
+## b. Calculate the p-values
+f_regression(x,y)
+p_values=f_regression(x,y)[1]
+p_values.round(4)
+
+## c. Creating the summary table
+reg_summary=pd.DataFrame(data=x.columns.values,columns=['Features'])
+reg_summary['coefficient']=reg.coef_
+reg_summary['p-value']=p_values.round(4)
+reg_summary
