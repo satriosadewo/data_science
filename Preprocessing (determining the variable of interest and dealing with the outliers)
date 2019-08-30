@@ -1,0 +1,31 @@
+## How to preprocessing the data before we run a linear regression using OLS 
+## At this momment, I use real data case about the price of used car which is determined by Brand, Price, Body, Mileage, EngineV, Engine Type, Registration, Year, and Model.
+
+## 1. Importing the relevant libraries
+import numpy as np
+import pandas as pd
+import statsmodels.api as sm
+import matplotlib.pyplot as plt
+from sklearn.linear_model import LinearRegression
+import seaborn as sns
+sns.set()
+
+## 2. Loading the raw data
+raw_data = pd.read_csv('Car Price Determination.csv')
+
+## 3. Preprocessing
+##    a. Exploring the descriptive statistics. We need to include="all" to perform all variable include the missing value)
+raw_data.describe(include='all')
+
+##    b. Determining the variable of interest by remove it, if we think the variables do not necessary. At this case, model is very unique so we decide to remove it.
+data = raw_data.drop(['Model'],axis=1)
+
+##    c. Dealing with the missing value. The syntax bellow is used to show how many missing value for each variable.
+data.isnull().sum()
+
+##    d. Removing the missing value. Axis=0 means rows.
+data_no_mv = data.dropna(axis=0)
+
+##    e. Check the changes. The number of observation will decrease as the removing the missing value
+data_no_mv.describe(include='all')
+
