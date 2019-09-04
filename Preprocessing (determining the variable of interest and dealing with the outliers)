@@ -1,4 +1,4 @@
-## How to preprocessing the data before we run a linear regression using OLS 
+## How to preprocessing the data before we run a linear regression using OLS. There are three kind of reprocessing techniques in this session, determining the variable of interest, dealing with missing values, and the outliers . 
 ## At this momment, I use real data case about the price of used car which is determined by Brand, Price, Body, Mileage, EngineV, Engine Type, Registration, Year, and Model.
 
 ## 1. Importing the relevant libraries
@@ -29,3 +29,23 @@ data_no_mv = data.dropna(axis=0)
 ##    e. Check the changes. The number of observation will decrease as the removing the missing value
 data_no_mv.describe(include='all')
 
+##    f. Dealing with outliers. First, we need to explore PDF (probability distribution function) to make it easy to spot anomalies, such as outliers.
+sns.displot(data_no_mv['Price'])
+
+##    g. Then, we need to remove the outliers by removing 1% or 5% of the problematic sample (Price). Then, we can create a new dataframe, with the condition that all prices must be below the 99 percentile of 'Price'. If the outliers high end, we use <. If the outliers low end, we use >. 
+q = data_no_mv['Price'].quantile(0.99)
+data_1 = data_no_mv[data_no_mv['Price']<q]
+data_1.describe(include='all')
+
+##    h. Or, we can remove the outliers based on the highest value, for example the highest value of engine volume is 6.5L, so we need to remove the value which bigger than that.
+data_2 = data_1[data_1['EngineV']<6.5]
+sns.displot(data_2['EngineV'])
+
+##    i. If we find other problematic variables, such as outlier, we can remove the 1%. The data is picked from previous removing (at this case, from data_2)
+q = data_2['Mileage'].quantile(0.99)
+data_3 = data_2[data_2['Mileage']<q]
+sns.displot(data_3['Mileage'])
+
+##    j. After we process the problematic variables, it is time to reset the old index that contain problematic data.
+data_cleaned = data_4.reset_index(drop=True)
+data_cleaned.describe(include='all')
