@@ -29,6 +29,6 @@ vif["features"] = variables.columns
 vif
 
 ## 6. Intrepreting the VIF result, we can use this parameter. If the VIF = 1, so there is no multicollinearity. If the VIF between 1 and 5, so this is perfectly ok. If the VIF > 10, the variable is not unaccepted. The result of VIF shows that year variable have VIF 10.35, so we need to remove it.
-
+data_no_multicollinearity = data_cleaned.drop(['Year'],axis=1)
 
 ## No Endogenety assumption will be discussed after the regression model is created.
