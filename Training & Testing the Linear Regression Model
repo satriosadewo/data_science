@@ -1,0 +1,86 @@
+## This section will continue the previous section about "Car Price Determination". Please check the previous file about data preprocessing first.
+## CREATING LINEAR REGRESSION MODEL WITH THE TRAIN AND THE TEST METHOD
+
+## 1. Declare the targets and the inputs. In this case, we want to predict price so our target is price (log_price). Then the inputs are any variables exclude price.
+targets = data_preprocessed['log_price']
+inputs = data_preprocessed.drop(['log_price'],axis=1)
+
+## 2. We need to standard all the input variables, so we should scale them. Scalling has no effect on the predictive power of the dummies, once scaled, they lose all their dummies meaning
+from sklearn.preprocessing import StandardScaler
+
+scaler = StandardScaler()
+scaler.fit(inputs)
+
+inputs_scaled = scaler.transform(inputs)
+
+## 3. Split our data into training and testing. The TRAINING is below.
+from sklearn.model_selection import train_test_split
+
+x_train, x_test, y_train, y_test = train_test_split(inputs_scaled, targets, test_size=0.2, random_state=365)
+
+## 4. Create the regression and show the scatter plot.
+reg = LinearRegression()
+reg.fit(x_train,y_train)
+
+y_hat = reg.predict(x_train)
+plt.scatter(y_train, y_hat)
+plt.xlabel('Targets (y_train)',size=18)
+plt.ylabel('Predictions (y_hat)',size=18)
+plt.xlim(6,13)
+plt.ylim(6,13)
+plt.show()
+
+## 5. The result shows that the prediction and the target should make 45 degree line, that indicate the target have a close value with the prediction.
+## 6. Another ways to check the aquracy is by using residual value plot which mean that the differences between the targets and the predictions.
+sns.distplot(y_train - y_hat)
+plt.title("Residuals PDF", size=18)
+
+## 7. Checking the residual pdf is by looking at the mean shoul near or precisely 0. Than look at the tail, the right tail means that the number of underestimated, the left tail means that the number of overestimated.
+
+## 8. Calculate the R-squared. The result is 0.744996.... means that this model explains 75% of the variability of the data. Relatively good
+reg.score(x_train,y_train)
+
+## 9. Finding the weight and bias.
+reg.intercept_
+
+reg.coef_
+
+reg_summary = pd.DataFrame(inputs.columns.values, columns=['Features'])
+reg_summary['Weights'] = reg.coef_
+reg_summary
+
+## 10. The weight interpretation as follow: a positive value mean that the variable increase, then the price increase. A negative value means that the variable increase, then the price decrease.
+## 11. For the dummy variables intrepretation as follow: a positive value mean that the specific categories are more expensive than the benchmark category. A negative value means that the specific categories are less expensive than the benchmark category (Audi)
+
+## 12. TESTING the model (prediction & target) we've already made by showing the scatter plot. Using alpha function, we can change the opacity to know the data concentration. 
+y_hat_test = reg.predict(x_test)
+plt.scatter(y_test, y_hat_test, alpha=0.2)
+plt.xlabel('Targets (y_test)',size=18)
+plt.ylabel('Predictions (y_hat_test)',size=18)
+plt.xlim(6,13)
+plt.ylim(6,13)
+plt.show()
+
+## 13. Showing the prediction value. (np.exp is the pandas function to reconvert the transformed data to normal data, this case is price variable)
+df_pf = pd.DataFrame(np.exp(y_hat_test), columns=['Prediction'])
+df_pf.head()
+
+## 14. Showing the target value.
+df_pf['Target'] = np.exp(y_test)
+df_pf
+
+## 15. The result show a lot of missing value. This issue happend because pandas try to keep and match the index. The solution is by reseting the data.
+y_test = y_test.reset_index(drop=True)
+y_test.head()
+
+df_pf['Target'] = np.exp(y_test)
+df_pf
+
+## 16. Knowing the accuracy of the model (Prediction and Target), we can check the Residual to evaluate the regression. The goal is making the model with most minimum residual (minimizing SSE)
+df_pf['Residual'] = df_pf['Target'] - df_pf['Prediction']
+df_pf['Difference%'] = np.absolute(df_pf['Residual']/df_pf['Target']*100)
+df_pf
+
+## 17. Interpreting the result of the residual, we can check by creating the desriptive statistic
+df_pf.describe()
+
