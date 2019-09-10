@@ -1,0 +1,14 @@
+## This section will explain how to create dummy from categorical data. The data source come from previous session ("Car price determination")
+
+## 1. This method is very useful to create dummy variables due to the ability to spot all categorical data and convert into dummy variable automatically.
+## The syntax : pd.get_dummies(df[,drop_first])
+
+data_with_dummies = pd.get_dummies(data_no_multicollinearity, drop_first=True)
+data_with_dummies.head()
+
+## 2. Check the VIF of dummy variables without log_price, so we can check the no-multicolinearity of the dummy variables.
+variables = data_with_dummies_new.drop(['log_price'],axis=1)
+vif = pd.DataFrame()
+vif["VIF"] = [variance_inflation_factor(variables.values, i) for i in range(variables.shape[1])]
+vif["features"] = variables.columns
+vif
