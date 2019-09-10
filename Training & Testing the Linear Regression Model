@@ -84,3 +84,9 @@ df_pf
 ## 17. Interpreting the result of the residual, we can check by creating the desriptive statistic
 df_pf.describe()
 
+## SPECIAL NOTE
+This model is far from perfect. Need the further improvement. There are some ways to improve the linier regression model:
+1. Use different set of variable.
+2. Remove the bigger part of the outliers.
+3. Use different kind of transformation.
+
